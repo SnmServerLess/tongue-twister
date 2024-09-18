@@ -107,10 +107,10 @@ const ErrorHandler = {
 const GetNewFactHandler = {
   canHandle(handlerInput) {
     const request = handlerInput.requestEnvelope.request;
-    return request.type === 'IntentRequest' || (request.type === 'IntentRequest')
-    && (request.intent.name === 'AMAZON.HelpIntent') || request.intent.name === 'GetNewFactIntent' || request.intent.name === 'AnotherFactIntent' || request.intent.name === 'AMAZON.YesIntent');
+    return request.type === 'IntentRequest' || (request.type === 'IntentRequest'
+    && (request.intent.name === 'AMAZON.HelpIntent' || request.intent.name === 'GetNewFactIntent' || request.intent.name === 'AnotherFactIntent' || request.intent.name === 'AMAZON.YesIntent'));
   },
-  handle(handlerInput) {
+  async handle(handlerInput) {
     const randomFact = await getTongueTwister();
     const attributesManager = handlerInput.attributesManager;
     let sessionAttributes = attributesManager.getSessionAttributes();
@@ -128,7 +128,7 @@ const GetNewFactHandler = {
 const RepeatHandler = {
   canHandle(handlerInput) {
     const request = handlerInput.requestEnvelope.request;
-    return request.type === 'IntentRequest' && request.intent.name === 'AMAZON.RepeatIntent');
+    return request.type === 'IntentRequest' && request.intent.name === 'AMAZON.RepeatIntent';
   },
   async handle(handlerInput) {
     const randomFact = await getTongueTwister();

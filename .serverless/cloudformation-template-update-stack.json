@@ -91,7 +91,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-southeast-1-f2d5a020-ac4d",
-          "S3Key": "serverless/tongueTwister/prod/1726675089887-2024-09-18T15:58:09.887Z/tongueTwister.zip"
+          "S3Key": "serverless/tongueTwister/prod/1726676352791-2024-09-18T16:19:12.791Z/tongueTwister.zip"
         },
         "Handler": "index.handler",
         "Runtime": "nodejs18.x",
@@ -114,14 +114,14 @@
         "TongueTwisterLogGroup"
       ]
     },
-    "TongueTwisterLambdaVersionRlMD3A9nLk7vx6DHkbYh2SQUFg9Sw8s3t0CPYM": {
+    "TongueTwisterLambdaVersionDNgU2wPRsuLEVS2EXo6C7vefcqACQhnms9MVWg6EBI": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "TongueTwisterLambdaFunction"
         },
-        "CodeSha256": "zVnz+CgR7jS8Ig9YCH1447SxTQwhFIGasq35QXXGFgA="
+        "CodeSha256": "tVpzseam564zJoWvCySxwAWmXlnUdgIxexXeDjbqGKE="
       }
     },
     "TongueTwisterLambdaPermissionAlexaSkill1": {
@@ -149,7 +149,7 @@
     "TongueTwisterLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "TongueTwisterLambdaVersionRlMD3A9nLk7vx6DHkbYh2SQUFg9Sw8s3t0CPYM"
+        "Ref": "TongueTwisterLambdaVersionDNgU2wPRsuLEVS2EXo6C7vefcqACQhnms9MVWg6EBI"
       },
       "Export": {
         "Name": "sls-tongueTwister-prod-TongueTwisterLambdaFunctionQualifiedArn"
