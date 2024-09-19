@@ -1,6 +1,6 @@
 const Alexa = require('ask-sdk-core');
 
-const SKILL_NAME = "inx ocean";
+const SKILL_NAME = "my fun";
 const GET_FACT_MESSAGE = "Here's a tongue twister for you...";
 
 const CONTINUE_REPROMPT = "Would you like another tongue twister or would you like me to repeat the last one?";
@@ -19,22 +19,27 @@ const STOP_MESSAGE = "Thank you for using inx ocean! I look forward to seeing yo
 const ERROR_MESSAGE = "Sorry, an error occurred. Please try again after some time."
 
 const DATA = [
-    "Tiny tiger tied her tie tighter to tidy her tiny tail.",
-    "She sells sea shells at the sea shore.",
-    "How much pot, could a pot roast roast, if a pot roast could roast pot.",
-    "Which wristwatches are Swiss wristwatches?",
-    "How much wood would a woodchuck chuck, if a woodchuck could chuck wood?",
-    "Tiny tiger tied her tie tighter to tidy her tiny tail.",
-    "She sells sea shells at the sea shore.",
-    "How much pot, could a pot roast roast, if a pot roast could roast pot.",
-    "Which wristwatches are Swiss wristwatches?",
-    "How much wood would a woodchuck chuck, if a woodchuck could chuck wood?",
-    "Tiny tiger tied her tie tighter to tidy her tiny tail.",
-    "She sells sea shells at the sea shore.",
-    "How much pot, could a pot roast roast, if a pot roast could roast pot.",
-    "Which wristwatches are Swiss wristwatches?",
-    "How much wood would a woodchuck chuck, if a woodchuck could chuck wood?"
+  "Tiny tiger tied her tie tighter to tidy her tiny tail.",
+  "She sells sea shells at the sea shore.",
+  "How much pot, could a pot roast roast, if a pot roast could roast pot.",
+  "Which wristwatches are Swiss wristwatches?",
+  "How much wood would a woodchuck chuck, if a woodchuck could chuck wood?",
 ];
+
+
+const LaunchRequestHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
+  },
+  handle(handlerInput) {
+    // This function handles the LaunchRequest
+    const speechText = 'Welcome to your skill! How can I assist you today?';
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .reprompt(speechText)
+      .getResponse();
+  },
+};
 
 const HelpHandler = {
     canHandle(handlerInput) {
@@ -131,26 +136,27 @@ const RepeatHandler = {
     return request.type === 'IntentRequest' && request.intent.name === 'AMAZON.RepeatIntent';
   },
   async handle(handlerInput) {
-    const randomFact = await getTongueTwister();
     const attributesManager = handlerInput.attributesManager;
+    let sessionAttributes = attributesManager.getSessionAttributes(); // Retrieve session attributes
     let randomFact = sessionAttributes.lastSpeech;
+
     if(randomFact){
       return handlerInput.responseBuilder
       .speak(REPEAT_MESSAGE + randomFact + CONTINUE_REPROMPT)
       .reprompt(CONTINUE_REPROMPT)
-      .getResponse()
-    }else{
+      .getResponse();
+    } else {
       return handlerInput.responseBuilder
       .speak(CANT_REPEAT_PROMPT)
       .reprompt(CANT_REPEAT_PROMPT)
-      .getResponse()
+      .getResponse();
     }
   }
 };
 
 const getTongueTwister = async () => {
   let length = DATA.length;
-  const selectedIndex = Match.floor(Match.random() * length);
+  const selectedIndex = Math.floor(Math.random() * length); // Corrected Math
   let result = DATA[selectedIndex];
   return result;
 }
@@ -162,6 +168,7 @@ exports.handler = async (event, context) => {
     if (!skill) {
         skill = Alexa.SkillBuilders.custom()
         .addRequestHandlers(
+            LaunchRequestHandler,
             GetNewFactHandler,
             RepeatHandler,
             HelpHandler,

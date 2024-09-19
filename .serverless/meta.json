@@ -1,0 +1,473 @@
+{
+  "/Users/snmmaurya/Documents/ocean/ASA/serverless/tongue-twister": {
+    "versionSfCore": null,
+    "versionFramework": "4.3.3",
+    "isWithinCompose": false,
+    "isCompose": false,
+    "composeOrgName": null,
+    "composeResolverProviders": {
+      "default-aws-credential-resolver": "<REDACTED>",
+      "self": {
+        "instance": {
+          "credentials": "<REDACTED>",
+          "serviceConfigFile": {
+            "service": "tongueTwister",
+            "provider": {
+              "name": "aws",
+              "runtime": "nodejs18.x",
+              "stage": "prod",
+              "region": "ap-southeast-1",
+              "memorySize": 128,
+              "timeout": 5,
+              "environment": {
+                "ALEXA_SKILL_ID": "amzn1.ask.skill.f143a175-359e-453e-aa75-938f5eb5f3a5"
+              },
+              "versionFunctions": true,
+              "compiledCloudFormationTemplate": {
+                "AWSTemplateFormatVersion": "2010-09-09",
+                "Description": "The AWS CloudFormation template for this Serverless application",
+                "Resources": {
+                  "TongueTwisterLogGroup": {
+                    "Type": "AWS::Logs::LogGroup",
+                    "Properties": {
+                      "LogGroupName": "/aws/lambda/tongueTwister-prod"
+                    }
+                  },
+                  "IamRoleLambdaExecution": {
+                    "Type": "AWS::IAM::Role",
+                    "Properties": {
+                      "AssumeRolePolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                          {
+                            "Effect": "Allow",
+                            "Principal": {
+                              "Service": [
+                                "lambda.amazonaws.com"
+                              ]
+                            },
+                            "Action": [
+                              "sts:AssumeRole"
+                            ]
+                          }
+                        ]
+                      },
+                      "Policies": [
+                        {
+                          "PolicyName": {
+                            "Fn::Join": [
+                              "-",
+                              [
+                                "tongueTwister",
+                                "prod",
+                                "lambda"
+                              ]
+                            ]
+                          },
+                          "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "logs:CreateLogStream",
+                                  "logs:CreateLogGroup",
+                                  "logs:TagResource"
+                                ],
+                                "Resource": [
+                                  {
+                                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/tongueTwister-prod*:*"
+                                  }
+                                ]
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "logs:PutLogEvents"
+                                ],
+                                "Resource": [
+                                  {
+                                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/tongueTwister-prod*:*:*"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "Path": "/",
+                      "RoleName": {
+                        "Fn::Join": [
+                          "-",
+                          [
+                            "tongueTwister",
+                            "prod",
+                            {
+                              "Ref": "AWS::Region"
+                            },
+                            "lambdaRole"
+                          ]
+                        ]
+                      }
+                    }
+                  },
+                  "TongueTwisterLambdaFunction": {
+                    "Type": "AWS::Lambda::Function",
+                    "Properties": {
+                      "Code": {
+                        "S3Bucket": "serverless-framework-deployments-ap-southeast-1-f2d5a020-ac4d",
+                        "S3Key": "serverless/tongueTwister/prod/1726713257640-2024-09-19T02:34:17.640Z/tongueTwister.zip"
+                      },
+                      "Handler": "index.handler",
+                      "Runtime": "nodejs18.x",
+                      "FunctionName": "tongueTwister-prod",
+                      "MemorySize": 128,
+                      "Timeout": 5,
+                      "Environment": {
+                        "Variables": {
+                          "ALEXA_SKILL_ID": "amzn1.ask.skill.f143a175-359e-453e-aa75-938f5eb5f3a5"
+                        }
+                      },
+                      "Role": {
+                        "Fn::GetAtt": [
+                          "IamRoleLambdaExecution",
+                          "Arn"
+                        ]
+                      }
+                    },
+                    "DependsOn": [
+                      "TongueTwisterLogGroup"
+                    ]
+                  },
+                  "TongueTwisterLambdaVersionxoMUFx62vXDU3hRsD0B8MXiSNTjnjgJCDkL0Gk0": {
+                    "Type": "AWS::Lambda::Version",
+                    "DeletionPolicy": "Retain",
+                    "Properties": {
+                      "FunctionName": {
+                        "Ref": "TongueTwisterLambdaFunction"
+                      },
+                      "CodeSha256": "n3BhPeBMNTHoXIf24pqtytV78Oh/TltrW1c3ErTkJIk="
+                    }
+                  },
+                  "TongueTwisterLambdaPermissionAlexaSkill1": {
+                    "Type": "AWS::Lambda::Permission",
+                    "Properties": {
+                      "FunctionName": {
+                        "Fn::GetAtt": [
+                          "TongueTwisterLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "Action": "lambda:InvokeFunction",
+                      "Principal": "alexa-appkit.amazon.com",
+                      "EventSourceToken": "<REDACTED>"
+                    }
+                  }
+                },
+                "Outputs": {
+                  "ServerlessDeploymentBucketName": {
+                    "Value": "serverless-framework-deployments-ap-southeast-1-f2d5a020-ac4d",
+                    "Export": {
+                      "Name": "sls-tongueTwister-prod-ServerlessDeploymentBucketName"
+                    }
+                  },
+                  "TongueTwisterLambdaFunctionQualifiedArn": {
+                    "Description": "Current Lambda function version",
+                    "Value": {
+                      "Ref": "TongueTwisterLambdaVersionxoMUFx62vXDU3hRsD0B8MXiSNTjnjgJCDkL0Gk0"
+                    },
+                    "Export": {
+                      "Name": "sls-tongueTwister-prod-TongueTwisterLambdaFunctionQualifiedArn"
+                    }
+                  }
+                }
+              },
+              "vpc": {}
+            },
+            "functions": {
+              "tongueTwister": {
+                "handler": "index.handler",
+                "name": "tongueTwister-prod",
+                "events": [
+                  {
+                    "alexaSkill": "amzn1.ask.skill.f143a175-359e-453e-aa75-938f5eb5f3a5"
+                  }
+                ],
+                "package": {},
+                "memory": 128,
+                "timeout": 5,
+                "runtime": "nodejs18.x",
+                "vpc": {},
+                "versionLogicalId": "TongueTwisterLambdaVersionxoMUFx62vXDU3hRsD0B8MXiSNTjnjgJCDkL0Gk0"
+              }
+            }
+          },
+          "configFileDirPath": "/Users/snmmaurya/Documents/ocean/ASA/serverless/tongue-twister",
+          "config": {
+            "type": "self"
+          },
+          "options": {
+            "verbose": true
+          },
+          "stage": "prod",
+          "dashboard": null,
+          "logger": {
+            "namespace": "s:core:resolver:self",
+            "prefix": null,
+            "prefixColor": null
+          },
+          "_credentialsPromise": "<REDACTED>"
+        },
+        "resolvers": {}
+      }
+    },
+    "composeServiceName": null,
+    "servicePath": "/Users/snmmaurya/Documents/ocean/ASA/serverless/tongue-twister",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "tongueTwister",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs18.x",
+        "stage": "prod",
+        "region": "ap-southeast-1",
+        "memorySize": 128,
+        "timeout": 5,
+        "environment": {
+          "ALEXA_SKILL_ID": "amzn1.ask.skill.f143a175-359e-453e-aa75-938f5eb5f3a5"
+        },
+        "versionFunctions": true,
+        "compiledCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "TongueTwisterLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/tongueTwister-prod"
+              }
+            },
+            "IamRoleLambdaExecution": {
+              "Type": "AWS::IAM::Role",
+              "Properties": {
+                "AssumeRolePolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Principal": {
+                        "Service": [
+                          "lambda.amazonaws.com"
+                        ]
+                      },
+                      "Action": [
+                        "sts:AssumeRole"
+                      ]
+                    }
+                  ]
+                },
+                "Policies": [
+                  {
+                    "PolicyName": {
+                      "Fn::Join": [
+                        "-",
+                        [
+                          "tongueTwister",
+                          "prod",
+                          "lambda"
+                        ]
+                      ]
+                    },
+                    "PolicyDocument": {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:CreateLogStream",
+                            "logs:CreateLogGroup",
+                            "logs:TagResource"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/tongueTwister-prod*:*"
+                            }
+                          ]
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:PutLogEvents"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/tongueTwister-prod*:*:*"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "Path": "/",
+                "RoleName": {
+                  "Fn::Join": [
+                    "-",
+                    [
+                      "tongueTwister",
+                      "prod",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      "lambdaRole"
+                    ]
+                  ]
+                }
+              }
+            },
+            "TongueTwisterLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-ap-southeast-1-f2d5a020-ac4d",
+                  "S3Key": "serverless/tongueTwister/prod/1726713257640-2024-09-19T02:34:17.640Z/tongueTwister.zip"
+                },
+                "Handler": "index.handler",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "tongueTwister-prod",
+                "MemorySize": 128,
+                "Timeout": 5,
+                "Environment": {
+                  "Variables": {
+                    "ALEXA_SKILL_ID": "amzn1.ask.skill.f143a175-359e-453e-aa75-938f5eb5f3a5"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "TongueTwisterLogGroup"
+              ]
+            },
+            "TongueTwisterLambdaVersionxoMUFx62vXDU3hRsD0B8MXiSNTjnjgJCDkL0Gk0": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "TongueTwisterLambdaFunction"
+                },
+                "CodeSha256": "n3BhPeBMNTHoXIf24pqtytV78Oh/TltrW1c3ErTkJIk="
+              }
+            },
+            "TongueTwisterLambdaPermissionAlexaSkill1": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "TongueTwisterLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "alexa-appkit.amazon.com",
+                "EventSourceToken": "<REDACTED>"
+              }
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": "serverless-framework-deployments-ap-southeast-1-f2d5a020-ac4d",
+              "Export": {
+                "Name": "sls-tongueTwister-prod-ServerlessDeploymentBucketName"
+              }
+            },
+            "TongueTwisterLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "TongueTwisterLambdaVersionxoMUFx62vXDU3hRsD0B8MXiSNTjnjgJCDkL0Gk0"
+              },
+              "Export": {
+                "Name": "sls-tongueTwister-prod-TongueTwisterLambdaFunctionQualifiedArn"
+              }
+            }
+          }
+        },
+        "vpc": {}
+      },
+      "functions": {
+        "tongueTwister": {
+          "handler": "index.handler",
+          "name": "tongueTwister-prod",
+          "events": [
+            {
+              "alexaSkill": "amzn1.ask.skill.f143a175-359e-453e-aa75-938f5eb5f3a5"
+            }
+          ],
+          "package": {},
+          "memory": 128,
+          "timeout": 5,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "TongueTwisterLambdaVersionxoMUFx62vXDU3hRsD0B8MXiSNTjnjgJCDkL0Gk0"
+        }
+      }
+    },
+    "serviceRawFile": "service: tongueTwister\n\nprovider:\n  name: aws\n  runtime: nodejs18.x\n  stage: prod\n  # For Customers/Devices located in North America, use us-east-1\n  # For Customers/Devices located in Europe and India, use eu-west-1\n  # For Customers/Devices located in Far East, use us-west-2 or ap-northeast-1\n  region: ap-southeast-1\n  memorySize: 128\n  timeout: 5\n  environment:\n    ALEXA_SKILL_ID: amzn1.ask.skill.f143a175-359e-453e-aa75-938f5eb5f3a5\n\nfunctions:\n  tongueTwister:\n    handler: index.handler\n    name: ${self:service}-${self:provider.stage}\n    events:\n      - alexaSkill: ${self:provider.environment.ALEXA_SKILL_ID}\n",
+    "command": [
+      "deploy"
+    ],
+    "options": {
+      "verbose": true
+    },
+    "error": null,
+    "params": {},
+    "machineId": "8771171f4c959c2ccf317951f433243b",
+    "stage": "prod",
+    "accessKeyV2": "<REDACTED>",
+    "accessKeyV1": "<REDACTED>",
+    "orgId": "8e111dfd-429d-430e-a05f-3c3f87a1d3eb",
+    "orgName": "inxocean",
+    "userId": "BcBNFFNzyFC0y8Xtxh",
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "userName": "inxocean",
+    "subscription": null,
+    "userEmail": "snmspace@gmail.com",
+    "serviceProviderAwsRegion": "ap-southeast-1",
+    "serviceProviderAwsCredentials": "<REDACTED>",
+    "serviceProviderAwsAccountId": "741448962015",
+    "projectType": "traditional",
+    "versionSf": "4.3.3",
+    "serviceProviderAwsCfStackName": "tongueTwister-prod",
+    "integrations": {},
+    "serviceUniqueId": "arn:aws:cloudformation:ap-southeast-1:741448962015:stack/tongueTwister-prod/42b7c0f0-75d4-11ef-b26d-023a111b58a5",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:ap-southeast-1:741448962015:stack/tongueTwister-prod/42b7c0f0-75d4-11ef-b26d-023a111b58a5",
+    "serviceProviderAwsCfStackCreated": "2024-09-18T15:39:59.327Z",
+    "serviceProviderAwsCfStackUpdated": "2024-09-19T02:34:25.368Z",
+    "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
+    "serviceProviderAwsCfStackOutputs": [
+      {
+        "OutputKey": "TongueTwisterLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:ap-southeast-1:741448962015:function:tongueTwister-prod:9",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-tongueTwister-prod-TongueTwisterLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "ServerlessDeploymentBucketName",
+        "OutputValue": "serverless-framework-deployments-ap-southeast-1-f2d5a020-ac4d",
+        "ExportName": "sls-tongueTwister-prod-ServerlessDeploymentBucketName"
+      }
+    ]
+  }
+}
